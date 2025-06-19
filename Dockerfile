@@ -27,6 +27,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
+# Run Laravel migration (and optional config clear)
+RUN php artisan config:clear && php artisan migrate --force
+
+# Optional: uncomment below if you want to auto-seed fake data
+RUN php artisan db:seed --force
+
 # Expose port
 EXPOSE 80
 
