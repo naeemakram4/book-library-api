@@ -1,17 +1,15 @@
 FROM php:8.2-apache
 
-# Install system dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libpq-dev libzip-dev \
     && docker-php-ext-install pdo pdo_pgsql zip
 
-# Enable Apache rewrite module
+# Enable Apache rewrite
 RUN a2enmod rewrite
 
-# Set document root to /var/www/html/public
+# Set public/ as the web root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
-# Update Apache config to use the new document root
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
 
 # Copy app files
@@ -27,14 +25,10 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Run Laravel migration (and optional config clear)
+# ✅ Run migration
 RUN php artisan config:clear && php artisan migrate --force
-
-# Optional: uncomment below if you want to auto-seed fake data
-#RUN php artisan db:seed --force
 
 # Expose port
 EXPOSE 80
 
-# Start Apache server
 CMD ["apache2-foreground"]
