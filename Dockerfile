@@ -25,7 +25,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-RUN php artisan config:clear && php artisan migrate:fresh --force && echo "✅ Migrations done"
+RUN php artisan config:clear && php artisan migrate --force && echo "✅ Migrations done"
 
 
 # Expose port
