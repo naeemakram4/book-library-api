@@ -3,7 +3,10 @@
 return [
     'paths' => ['api/*'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:3000'], //localhost:3000 is the port number of the frontend
+    'allowed_origins' => [
+        'http://localhost:3000',     // for local React dev
+        'https://naeem-codes.onrender.com', // optional: production frontend
+    ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
